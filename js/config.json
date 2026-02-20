@@ -1,0 +1,29 @@
+{
+  "boilerGroups": [
+    {
+      "label": "Coal",
+      "boilers": {
+        "small-coal-boilers": { "label": "Small Coal Boilers", "steamPerSecond": 120 },
+        "large-coal-boilers": { "label": "Large Coal Boilers", "steamPerSecond": 300 }
+      }
+    },
+    {
+      "label": "Solar",
+      "boilers": {
+        "simple-solar-boilers":   { "label": "Simple Solar Boilers",   "steamPerSecond": 120, "calcifiedPerSecond": 40  },
+        "advanced-solar-boilers": { "label": "Advanced Solar Boilers", "steamPerSecond": 360, "calcifiedPerSecond": 120 }
+      }
+    },
+    {
+      "label": "Lava",
+      "boilers": {
+        "reinforced-lava-boilers": { "label": "Reinforced Lava Boilers", "steamPerSecond": 600 }
+      }
+    }
+  ],
+  "turbines": {
+    "lv-steam-turbines": { "label": "LV Basic Steam Turbines",    "euPerTick": 32,  "lossPerTick": 1, "efficiency": 0.85 },
+    "mv-steam-turbines": { "label": "MV Advanced Steam Turbines", "euPerTick": 128, "lossPerTick": 2, "efficiency": 0.75 },
+    "hv-steam-turbines": { "label": "HV Turbo Steam Turbines",    "euPerTick": 512, "lossPerTick": 4, "efficiency": 0.66 }
+  }
+}

@@ -1,0 +1,130 @@
+/* GTNH Steam Calculator — Custom styles (Bootstrap dark theme base) */
+
+:root {
+  --color-eu: #f0c040;
+  --color-surplus: #4caf6e;
+  --color-deficit: #e05555;
+}
+
+/* ===== NAVBAR ===== */
+.site-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.9rem;
+  color: var(--color-eu);
+  line-height: 1;
+}
+
+/* ===== SECTION HEADINGS ===== */
+.section-heading {
+  font-size: 0.75rem;
+  font-family: 'Press Start 2P', monospace;
+  color: var(--color-eu);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(240, 192, 64, 0.25);
+  padding-bottom: 0.5rem;
+}
+
+/* ===== BOILER GROUPS ===== */
+.boiler-group-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--bs-secondary-color);
+  margin-bottom: 0.5rem;
+}
+
+/* ===== INPUTS ===== */
+.calc-input {
+  font-size: 1.25rem;
+  text-align: right;
+}
+
+/* Inline stat badge next to labels */
+.stat-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  color: #adb5bd;
+  margin-left: 0.4rem;
+}
+
+/* Solar boiler dual-state badges — JS toggles display at runtime */
+.solar-stat-calcified {
+  display: none;
+  color: #adb5bd;
+}
+
+.solar-stat-calcified s {
+  color: var(--color-deficit);
+}
+
+/* ===== RESULT CARDS ===== */
+.result-card {
+  background: var(--bs-tertiary-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  height: 100%;
+}
+
+.result-card--eu {
+  border-color: rgba(240, 192, 64, 0.4);
+}
+
+.result-label {
+  font-size: 0.75rem;
+  color: var(--bs-secondary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.4rem;
+}
+
+.result-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Dual-unit steam display: L/s on top (large), L/t below (smaller) */
+.unit-ls,
+.unit-lt {
+  display: block;
+}
+
+.unit-lt {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--bs-secondary-color);
+}
+
+.result-unit {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--bs-secondary-color);
+}
+
+/* ===== EU ACCENT ===== */
+.eu-accent {
+  color: var(--color-eu);
+}
+
+/* ===== SURPLUS / DEFICIT STATES ===== */
+.result-card--surplus .result-value {
+  color: var(--color-surplus);
+}
+
+.result-card--deficit .result-value {
+  color: var(--color-deficit);
+}
+
+/* ===== EU MAX LINE (shown when steam is insufficient) ===== */
+.eu-max-line {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--bs-secondary-color);
+}
+
+.result-card--eu-deficit .result-value.eu-accent {
+  color: var(--color-deficit);
+}
