@@ -102,13 +102,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function setAutoBalance(id) {
     if (autoBalancedId) {
-      document.getElementById(autoBalancedId).removeAttribute('readonly');
+      const prevEl = document.getElementById(autoBalancedId);
+      prevEl.removeAttribute('readonly');
+      prevEl.classList.remove('is-auto-balanced');
       const prevBtn = document.querySelector(`[data-auto-for="${autoBalancedId}"]`);
       if (prevBtn) prevBtn.classList.remove('active');
     }
     autoBalancedId = id;
     if (id) {
-      document.getElementById(id).setAttribute('readonly', '');
+      const el = document.getElementById(id);
+      el.setAttribute('readonly', '');
+      el.classList.add('is-auto-balanced');
       const btn = document.querySelector(`[data-auto-for="${id}"]`);
       if (btn) btn.classList.add('active');
       localStorage.setItem(STORAGE_KEY_AUTO_BALANCED, id);

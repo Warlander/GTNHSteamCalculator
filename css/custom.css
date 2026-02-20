@@ -74,14 +74,19 @@
 .btn-auto-balance.active {
   color: var(--color-eu);
   border-color: var(--color-eu);
-  background: rgba(240, 192, 64, 0.12);
+  background: rgba(240, 192, 64, 0.18);
+  box-shadow: 0 0 6px rgba(240, 192, 64, 0.4);
 }
 
 /* Auto-balanced input (readonly) */
 .calc-input[readonly] {
-  opacity: 0.8;
-  color: var(--color-eu);
   cursor: default;
+}
+
+.calc-input.is-auto-balanced {
+  color: var(--color-eu);
+  border-color: var(--color-eu) !important;
+  box-shadow: 0 0 0 1px rgba(240, 192, 64, 0.35) inset;
 }
 
 /* ===== RESULT CARDS ===== */
