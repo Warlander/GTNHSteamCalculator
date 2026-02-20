@@ -58,6 +58,32 @@
   color: var(--color-deficit);
 }
 
+/* ===== AUTO-BALANCE BUTTON ===== */
+.btn-auto-balance {
+  color: var(--bs-secondary-color);
+  border-color: var(--bs-border-color);
+  background: transparent;
+}
+
+.btn-auto-balance:hover {
+  color: var(--color-eu);
+  border-color: var(--color-eu);
+  background: transparent;
+}
+
+.btn-auto-balance.active {
+  color: var(--color-eu);
+  border-color: var(--color-eu);
+  background: rgba(240, 192, 64, 0.12);
+}
+
+/* Auto-balanced input (readonly) */
+.calc-input[readonly] {
+  opacity: 0.8;
+  color: var(--color-eu);
+  cursor: default;
+}
+
 /* ===== RESULT CARDS ===== */
 .result-card {
   background: var(--bs-tertiary-bg);

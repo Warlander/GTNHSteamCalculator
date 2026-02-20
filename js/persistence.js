@@ -3,6 +3,7 @@
 
 const STORAGE_KEY_INPUTS    = 'gtnh-calc-inputs';
 export const STORAGE_KEY_CALCIFIED = 'gtnh-calcified-solar';
+export const STORAGE_KEY_AUTO_BALANCED = 'gtnh-auto-balanced';
 
 export function saveInputs() {
   const data = {};
@@ -24,4 +25,5 @@ export function restoreInputs() {
 export function resetInputs() {
   document.querySelectorAll('.calc-input').forEach(el => { el.value = '0'; });
   localStorage.removeItem(STORAGE_KEY_INPUTS);
+  localStorage.removeItem(STORAGE_KEY_AUTO_BALANCED);
 }

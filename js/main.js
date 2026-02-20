@@ -2,7 +2,7 @@
 
 import { calculateBoilers } from './boiler-calc.js';
 import { calculateTurbines } from './turbine-calc.js';
-import { saveInputs, restoreInputs, resetInputs, STORAGE_KEY_CALCIFIED } from './persistence.js';
+import { saveInputs, restoreInputs, resetInputs, STORAGE_KEY_CALCIFIED, STORAGE_KEY_AUTO_BALANCED } from './persistence.js';
 
 const TICKS_PER_SECOND  = 20;
 const DISPLAY_PRECISION = 3; // Decimal places shown for fractional EU/t values
@@ -67,6 +67,56 @@ document.addEventListener('DOMContentLoaded', async () => {
     }])
   );
 
+  // ===== AUTO-BALANCE STATE =====
+
+  let autoBalancedId = null;
+
+  function computeAutoBalancedCount(id) {
+    const calcified = isCalcified();
+    if (BOILERS[id] !== undefined) {
+      const otherBoilerCounts = Object.fromEntries(
+        Object.keys(BOILERS).map(bid => [bid, bid === id ? 0 : getCount(bid)])
+      );
+      const { steamGenerated: otherSteam } = calculateBoilers(BOILERS, otherBoilerCounts, calcified, TICKS_PER_SECOND);
+      const turbineCounts = Object.fromEntries(Object.keys(TURBINES).map(tid => [tid, getCount(tid)]));
+      const { steamConsumed } = calculateTurbines(TURBINES, turbineCounts);
+      const boiler = BOILERS[id];
+      const rateLS = (calcified && boiler.calcifiedPerSecond !== undefined)
+        ? boiler.calcifiedPerSecond
+        : boiler.steamPerSecond;
+      const steamPerTick = rateLS / TICKS_PER_SECOND;
+      if (steamPerTick === 0) return 0;
+      return Math.ceil(Math.max(0, steamConsumed - otherSteam) / steamPerTick);
+    } else {
+      const boilerCounts = Object.fromEntries(Object.keys(BOILERS).map(bid => [bid, getCount(bid)]));
+      const { steamGenerated } = calculateBoilers(BOILERS, boilerCounts, calcified, TICKS_PER_SECOND);
+      const otherTurbineCounts = Object.fromEntries(
+        Object.keys(TURBINES).map(tid => [tid, tid === id ? 0 : getCount(tid)])
+      );
+      const { steamConsumed: otherConsumed } = calculateTurbines(TURBINES, otherTurbineCounts);
+      const steamPerTick = TURBINES[id].steamPerTick;
+      if (steamPerTick === 0) return 0;
+      return Math.floor(Math.max(0, steamGenerated - otherConsumed) / steamPerTick);
+    }
+  }
+
+  function setAutoBalance(id) {
+    if (autoBalancedId) {
+      document.getElementById(autoBalancedId).removeAttribute('readonly');
+      const prevBtn = document.querySelector(`[data-auto-for="${autoBalancedId}"]`);
+      if (prevBtn) prevBtn.classList.remove('active');
+    }
+    autoBalancedId = id;
+    if (id) {
+      document.getElementById(id).setAttribute('readonly', '');
+      const btn = document.querySelector(`[data-auto-for="${id}"]`);
+      if (btn) btn.classList.add('active');
+      localStorage.setItem(STORAGE_KEY_AUTO_BALANCED, id);
+    } else {
+      localStorage.removeItem(STORAGE_KEY_AUTO_BALANCED);
+    }
+  }
+
   // ===== DOM GENERATION =====
 
   function renderBoilerInputs(container, boilerGroups) {
@@ -94,8 +144,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             ${boiler.label}
             ${badgeHTML}
           </label>
-          <input type="number" id="${id}" class="form-control calc-input"
-                 min="0" value="0" autocomplete="off" />
+          <div class="input-group">
+            <input type="number" id="${id}" class="form-control calc-input"
+                   min="0" value="0" autocomplete="off" />
+            <button type="button" class="btn btn-auto-balance" data-auto-for="${id}" title="Auto-balance this value">⚖</button>
+          </div>
         `;
         row.appendChild(col);
       }
@@ -113,8 +166,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           ${turbine.label}
           <span class="stat-badge" data-stat-for="${id}"></span>
         </label>
-        <input type="number" id="${id}" class="form-control calc-input"
-               min="0" value="0" autocomplete="off" />
+        <div class="input-group">
+          <input type="number" id="${id}" class="form-control calc-input"
+                 min="0" value="0" autocomplete="off" />
+          <button type="button" class="btn btn-auto-balance" data-auto-for="${id}" title="Auto-balance this value">⚖</button>
+        </div>
         <div class="form-text">${efficiencyPct}% efficiency</div>
       `;
       container.appendChild(col);
@@ -127,6 +183,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ===== ORCHESTRATION =====
 
   function recalculate() {
+    if (autoBalancedId) {
+      document.getElementById(autoBalancedId).value = computeAutoBalancedCount(autoBalancedId);
+    }
+
     const boilerCounts  = Object.fromEntries(Object.keys(BOILERS).map(id  => [id, getCount(id)]));
     const turbineCounts = Object.fromEntries(Object.keys(TURBINES).map(id => [id, getCount(id)]));
 
@@ -216,13 +276,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderStatBadges();
   restoreInputs();
 
+  const storedAB = localStorage.getItem(STORAGE_KEY_AUTO_BALANCED);
+  if (storedAB && (BOILERS[storedAB] || TURBINES[storedAB])) setAutoBalance(storedAB);
+
   const inputs = document.querySelectorAll('.calc-input');
   inputs.forEach(input => input.addEventListener('input', () => {
     saveInputs();
     recalculate();
   }));
 
-  document.getElementById('btn-reset-inputs').addEventListener('click', () => { resetInputs(); recalculate(); });
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('[data-auto-for]');
+    if (!btn) return;
+    const id = btn.dataset.autoFor;
+    setAutoBalance(autoBalancedId === id ? null : id);
+    recalculate();
+  });
+
+  document.getElementById('btn-reset-inputs').addEventListener('click', () => {
+    setAutoBalance(null);
+    resetInputs();
+    recalculate();
+  });
 
   recalculate();
 });

@@ -24,7 +24,9 @@ Verified against modpack version **2.8.4**.
 
 - **Deficit-aware EU output** — when steam supply falls short, the displayed EU/t reflects what the turbines can actually sustain rather than their theoretical maximum
 
-- **Persistent inputs** — your boiler/turbine counts and settings are saved in `localStorage` so they survive page reloads
+- **Auto-balance** — click the ⚖ button next to any input to lock it into auto-balance mode; the value becomes read-only and automatically adjusts to keep steam surplus as close to zero as possible (always ≥ 0). Only one input can be auto-balanced at a time; clicking ⚖ again disables it
+
+- **Persistent inputs** — your boiler/turbine counts, settings, and auto-balance selection are saved in `localStorage` so they survive page reloads
 
 ---
 
