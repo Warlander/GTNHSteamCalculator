@@ -41,11 +41,13 @@ Results were cross-checked against in-game examples to confirm accuracy.
 ## Project structure
 
 ```
-index.html          — UI layout (Bootstrap 5 dark theme)
-css/custom.css      — Styling overrides and result card colours
-js/boiler-calc.js   — Pure boiler calculation module (no DOM)
-js/turbine-calc.js  — Pure turbine calculation module (no DOM)
-js/main.js          — DOM orchestration: reads inputs, calls calc modules, renders results
+index.html              — UI layout (Bootstrap 5 dark theme)
+css/custom.css          — Styling overrides and result card colours
+js/config.json          — Boiler and turbine data (steam rates, EU/t, efficiency values)
+js/boiler-calc.js       — Pure boiler calculation module (no DOM)
+js/turbine-calc.js      — Pure turbine calculation module (no DOM)
+js/persistence.js       — localStorage save/restore/reset for inputs and settings
+js/main.js              — DOM orchestration: reads inputs, calls calc modules, renders results
 ```
 
 ---
