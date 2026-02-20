@@ -1,5 +1,7 @@
 # GTNH Steam Calculator
 
+**Live app: https://gtnh.warlander.app**
+
 A browser-based calculator for planning boiler and steam turbine setups in [GT: New Horizons](https://www.gtnewhorizons.com), a GregTech-based Minecraft modpack.
 
 Enter the number of boilers and turbines you have (or plan to build) and the tool instantly shows your steam production, steam consumption, surplus/deficit, and EU/t output.
